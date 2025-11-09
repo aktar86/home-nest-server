@@ -52,11 +52,11 @@ async function run() {
     });
 
     //latest-properties
-    app.get("/latest-properties", async (req, res) => {
+    app.get("/featured-properties", async (req, res) => {
       const cursor = propertiesCollection
         .find()
         .sort({ property_price: -1 })
-        .limit(6);
+        .limit(8);
       const result = await cursor.toArray();
       res.send(result);
     });
