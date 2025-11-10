@@ -31,8 +31,22 @@ async function run() {
 
     // get properties APIs here
     app.get("/properties", async (req, res) => {
-      const cursor = propertiesCollection.find();
+      const email = req.query.email;
+      const query = {};
+      if (email) {
+        query.property_owner_mail = email;
+      }
+
+      const cursor = propertiesCollection.find(query);
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // get specific data
+    app.get("/properties/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await propertiesCollection.findOne(query);
       res.send(result);
     });
 
