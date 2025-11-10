@@ -67,7 +67,7 @@ async function run() {
 
     //latest-properties
     app.get("/featured-properties", async (req, res) => {
-      const cursor = propertiesCollectionno
+      const cursor = propertiesCollection
         .find()
         .sort({ property_price: -1 })
         .limit(8);
