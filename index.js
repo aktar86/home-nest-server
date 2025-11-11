@@ -30,9 +30,14 @@ async function run() {
     const propertiesCollection = db.collection("properties");
     const reviewsCollection = db.collection("reviews");
 
-    
+    //review related APIs
+    app.get("/properties/reviews/", async (req, res) => {
+      const cursor = reviewsCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
-    // get properties APIs here
+    //properties APIs here
     app.get("/properties", async (req, res) => {
       const email = req.query.email;
       const query = {};
