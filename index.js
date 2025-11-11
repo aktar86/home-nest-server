@@ -65,6 +65,32 @@ async function run() {
       res.send(result);
     });
 
+    //update properties using modal
+    app.patch("/properties/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedProperty = req.body;
+
+      const query = { _id: new ObjectId(id) };
+      const options = {};
+      const updateDoc = {
+        $set: {
+          property_name: updatedProperty.property_name,
+          category: updatedProperty.category,
+          property_price: updatedProperty.property_price,
+          property_location: updatedProperty.property_location,
+          property_img_url: updatedProperty.property_img_url,
+          description: updatedProperty.description,
+        },
+      };
+
+      const result = await propertiesCollection.updateOne(
+        query,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+
     //latest-properties
     app.get("/featured-properties", async (req, res) => {
       const cursor = propertiesCollection
