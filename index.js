@@ -31,9 +31,15 @@ async function run() {
     const reviewsCollection = db.collection("reviews");
 
     //review related APIs
-    app.get("/properties/reviews/", async (req, res) => {
-      const cursor = reviewsCollection.find();
+    app.get("/reviews", async (req, res) => {
+      const cursor = reviewsCollection.find().sort({ createdAt: -1 });
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/reviews", async (req, res) => {
+      const newReview = req.body;
+      const result = await reviewsCollection.insertOne(newReview);
       res.send(result);
     });
 
@@ -103,7 +109,7 @@ async function run() {
     app.get("/featured-properties", async (req, res) => {
       const cursor = propertiesCollection
         .find()
-        .sort({ property_price: -1 })
+        .sort({ createdAt: -1 })
         .limit(8);
       const result = await cursor.toArray();
       res.send(result);
