@@ -28,6 +28,9 @@ async function run() {
     // create database
     const db = client.db("properties_DB");
     const propertiesCollection = db.collection("properties");
+    const reviewsCollection = db.collection("reviews");
+
+    
 
     // get properties APIs here
     app.get("/properties", async (req, res) => {
