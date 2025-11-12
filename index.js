@@ -110,7 +110,7 @@ async function run() {
       const cursor = propertiesCollection
         .find()
         .sort({ createdAt: -1 })
-        .limit(8);
+        .limit(6);
       const result = await cursor.toArray();
       res.send(result);
     });
