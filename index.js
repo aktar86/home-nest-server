@@ -127,7 +127,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("HomeNest Api server is running!");
 });
 
 app.listen(port, () => {
