@@ -23,12 +23,26 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     // create database
     const db = client.db("properties_DB");
     const propertiesCollection = db.collection("properties");
     const reviewsCollection = db.collection("reviews");
+    const usersCollection = db.collection("users");
+
+    //user APIs here
+    app.get("/users", async (req, res) => {
+      const cursor = usersCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/users", async (req, res) => {
+      const newUser = req.body;
+      const result = await usersCollection.insertOne(newUser);
+      res.send(result);
+    });
 
     //review related APIs
     app.get("/reviews", async (req, res) => {
@@ -106,7 +120,7 @@ async function run() {
     });
 
     //latest-properties
-    app.get("/featured-properties", async (req, res) => {
+    app.get("/latest-properties", async (req, res) => {
       const cursor = propertiesCollection
         .find()
         .sort({ createdAt: -1 })
