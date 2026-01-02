@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     // create database
     const db = client.db("properties_DB");
@@ -38,8 +38,22 @@ async function run() {
       user.createdAt = new Date();
 
       const result = await usersCollection.insertOne(user);
-      res.send(result)
+      res.send(result);
     });
+
+    //     //user APIs here
+    //     app.get("/users", async (req, res) => {
+    //       const cursor = usersCollection.find();
+    //       const result = await cursor.toArray();
+    //       res.send(result);
+    //     });
+
+    //     app.post("/users", async (req, res) => {
+    //       const newUser = req.body;
+    //       const result = await usersCollection.insertOne(newUser);
+    //       res.send(result);
+    // >>>>>>> 82ef5262381940fb7104af2e0f77dd10574ea2b3
+    //     });
 
     //review related APIs
     app.get("/reviews", async (req, res) => {
@@ -118,7 +132,7 @@ async function run() {
     });
 
     //latest-properties
-    app.get("/featured-properties", async (req, res) => {
+    app.get("/latest-properties", async (req, res) => {
       const cursor = propertiesCollection
         .find()
         .sort({ createdAt: -1 })
@@ -127,7 +141,7 @@ async function run() {
       res.send(result);
     });
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
@@ -139,7 +153,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("HomeNest Api server is running!");
 });
 
 app.listen(port, () => {
