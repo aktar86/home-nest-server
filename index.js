@@ -51,13 +51,13 @@ async function run() {
         query.property_owner_mail = email;
       }
 
-      const cursor = propertiesCollection.find(query);
+      const cursor = propertiesCollection.find(query).sort({ createdAt: -1 });
       const result = await cursor.toArray();
       res.send(result);
     });
 
     // get specific data
-    app.get("/properties/:id", async (req, res) => {
+    app.get("/properties/:id", async (req, res) => {2
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await propertiesCollection.findOne(query);
