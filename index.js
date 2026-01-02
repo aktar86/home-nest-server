@@ -29,6 +29,17 @@ async function run() {
     const db = client.db("properties_DB");
     const propertiesCollection = db.collection("properties");
     const reviewsCollection = db.collection("reviews");
+    const usersCollection = db.collection("users");
+
+    //user related api
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      user.role = "user";
+      user.createdAt = new Date();
+
+      const result = await usersCollection.insertOne(user);
+      res.send(result)
+    });
 
     //review related APIs
     app.get("/reviews", async (req, res) => {
@@ -57,7 +68,8 @@ async function run() {
     });
 
     // get specific data
-    app.get("/properties/:id", async (req, res) => {2
+    app.get("/properties/:id", async (req, res) => {
+      2;
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await propertiesCollection.findOne(query);
