@@ -32,6 +32,24 @@ async function run() {
     const usersCollection = db.collection("users");
 
     //user related api
+
+    //user get api
+    app.get("/users", async (req, res) => {
+      const cursor = usersCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await usersCollection.findOne({ email });
+      if (!result) {
+        return res.status(404).send({ message: "User not found!" });
+      }
+      res.send(result);
+    });
+
+    // user post api
     app.post("/users", async (req, res) => {
       const user = req.body;
       user.role = "user";
@@ -40,20 +58,6 @@ async function run() {
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
-
-    //     //user APIs here
-    //     app.get("/users", async (req, res) => {
-    //       const cursor = usersCollection.find();
-    //       const result = await cursor.toArray();
-    //       res.send(result);
-    //     });
-
-    //     app.post("/users", async (req, res) => {
-    //       const newUser = req.body;
-    //       const result = await usersCollection.insertOne(newUser);
-    //       res.send(result);
-    // >>>>>>> 82ef5262381940fb7104af2e0f77dd10574ea2b3
-    //     });
 
     //review related APIs
     app.get("/reviews", async (req, res) => {
