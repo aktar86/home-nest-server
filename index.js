@@ -33,6 +33,27 @@ async function run() {
 
     //user related api
 
+    //user update api
+    app.patch("/users/:id/role", async (req, res) => {
+      const id = req.params.id;
+      const { role } = req.body;
+
+      if (!role) {
+        return res.status(400).send({ message: "Role is required" });
+      }
+
+      const query = { _id: new ObjectId(id) };
+
+      const updateDoc = {
+        $set: {
+          role: role,
+        },
+      };
+
+      const result = await usersCollection.updateOne(query, updateDoc);
+      res.send(result);
+    });
+
     //user get api
     app.get("/users", async (req, res) => {
       const cursor = usersCollection.find();
@@ -46,7 +67,10 @@ async function run() {
       if (!result) {
         return res.status(404).send({ message: "User not found!" });
       }
-      res.send(result);
+      res.send({
+        result,
+        role: result?.role || "user",
+      });
     });
 
     // user post api
@@ -140,9 +164,22 @@ async function run() {
       const cursor = propertiesCollection
         .find()
         .sort({ createdAt: -1 })
-        .limit(6);
+        .limit(8);
       const result = await cursor.toArray();
       res.send(result);
+    });
+
+    // Add this in your index.js
+    app.get("/admin-stats", async (req, res) => {
+      const totalUsers = await usersCollection.estimatedDocumentCount();
+      const totalProperties =
+        await propertiesCollection.estimatedDocumentCount();
+      const totalReviews = await reviewsCollection.estimatedDocumentCount();
+
+      // Static dummy data for payment as you don't have integration
+      const totalRevenue = 150000;
+
+      res.send({ totalUsers, totalProperties, totalReviews, totalRevenue });
     });
 
     // await client.db("admin").command({ ping: 1 });
